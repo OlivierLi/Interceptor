@@ -1,21 +1,19 @@
-# Compiled Object files
-*.slo
-*.lo
+*.swp
+*.swo
 *.o
-*.obj
-
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
-
-# Compiled Static libraries
-*.lai
-*.la
 *.a
-*.lib
-
-# Executables
-*.exe
+*.so
+*.dSYM
 *.out
-*.app
+*.geo
+*.bgeo
+*.png
+.DS_Store
+*.sublime-*
+*.files
+*.user
+*.includes
+*.creator
+*.config
+*.directory
+bin/
