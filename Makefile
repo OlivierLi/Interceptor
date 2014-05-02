@@ -1,5 +1,5 @@
 CC=clang++
-LIBS = -lsfml-system -lsfml-window -lGLEW
+LIBS = -lsfml-system -lsfml-window -lGLEW -lGL
 FLAGS=-Wall -Werror -Wextra -Wfatal-errors --std=c++11 -g
 INCLUDE_DIRS=
 
