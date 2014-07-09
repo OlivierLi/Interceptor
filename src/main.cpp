@@ -7,21 +7,23 @@
 #include <SFML/Window.hpp>
 #include <chrono>
 #include <unistd.h>
+#include <memory>
 
 //Global variables
 std::chrono::steady_clock::time_point start;
 std::chrono::steady_clock::time_point end;
-sf::Window *window;
+std::unique_ptr<sf::Window> window;
 bool running = true;
 
 void setup_SFML(){
     sf::ContextSettings settings;
 
     settings.antialiasingLevel = 4;
-    settings.majorVersion = 3;
+    settings.majorVersion = 4;
     settings.minorVersion = 3;
 
-    window = new sf::Window(sf::VideoMode(1280, 720), "OpenGL", sf::Style::Close,settings);
+    sf::Window *window_temp = new sf::Window(sf::VideoMode(1280, 720), "OpenGL", sf::Style::Close,settings);
+    window = std::unique_ptr<sf::Window>(window_temp);
 }
 
 void process_input(){
@@ -77,8 +79,6 @@ int main() {
             usleep((MICRO_SECONDS_PER_FRAME - microseconds));
         }
     }
-
-    delete window;
 
     return 0;
 }
