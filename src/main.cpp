@@ -22,8 +22,7 @@ void setup_SFML(){
     settings.majorVersion = 4;
     settings.minorVersion = 3;
 
-    sf::Window *window_temp = new sf::Window(sf::VideoMode(1280, 720), "OpenGL", sf::Style::Close,settings);
-    window = std::unique_ptr<sf::Window>(window_temp);
+    window = std::unique_ptr<sf::Window>(new sf::Window(sf::VideoMode(1280, 720), "OpenGL", sf::Style::Close,settings));
 }
 
 void process_input(){

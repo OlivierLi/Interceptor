@@ -1,0 +1,3 @@
+class AIComponent {
+    public:
+};
