@@ -29,6 +29,8 @@ void process_input(){
 
     sf::Event windowEvent;
 
+    //This depletes the SFML event queue
+    //TODO keep the events of interest and discard the rest
     while (window->pollEvent(windowEvent)) {
         switch (windowEvent.type) {
             case sf::Event::Closed:
@@ -49,6 +51,9 @@ void render(){
 
 int main() {
 
+    //-----------------------------------------------------
+    // SFML setup
+    //-----------------------------------------------------
     setup_SFML();
 
     //-----------------------------------------------------
