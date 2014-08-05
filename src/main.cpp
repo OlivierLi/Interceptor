@@ -8,12 +8,18 @@
 #include <chrono>
 #include <unistd.h>
 #include <memory>
+#include <vector>
+#include <iostream>
 
-//Global variables
+
+//Flow control and timing
 std::chrono::steady_clock::time_point start;
 std::chrono::steady_clock::time_point end;
 std::unique_ptr<sf::Window> window;
 bool running = true;
+
+//Keeps only the events we want for the current frame
+std::vector<sf::Event> frame_events;
 
 void setup_SFML(){
     sf::ContextSettings settings;
@@ -27,18 +33,24 @@ void setup_SFML(){
 
 void process_input(){
 
-    sf::Event windowEvent;
+    sf::Event window_event;
 
     //This depletes the SFML event queue
-    //TODO keep the events of interest and discard the rest
-    while (window->pollEvent(windowEvent)) {
-        switch (windowEvent.type) {
+    while (window->pollEvent(window_event)) {
+        switch (window_event.type) {
             case sf::Event::Closed:
                 running = false;
                 break;
+            case sf::Event::KeyPressed:
+                frame_events.push_back(window_event);
+                break;
+                //We do not handle long key presses for now
+            case sf::Event::KeyReleased:
+                break;
+            default:
+                break;
         }
     }
-
 }
 
 void update(){
