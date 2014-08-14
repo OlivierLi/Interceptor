@@ -11,17 +11,21 @@
 #include <vector>
 #include <iostream>
 
+#include "Rendering/renderer.h"
 
 //Flow control and timing
 std::chrono::steady_clock::time_point start;
 std::chrono::steady_clock::time_point end;
-std::unique_ptr<sf::Window> window;
 bool running = true;
+
+//Rendering and display
+std::unique_ptr<sf::Window> window;
+std::unique_ptr<Renderer::Renderer> renderer;
 
 //Keeps only the events we want for the current frame
 std::vector<sf::Event> frame_events;
 
-void setup_SFML(){
+void setup_display(){
     sf::ContextSettings settings;
 
     settings.antialiasingLevel = 4;
@@ -29,6 +33,7 @@ void setup_SFML(){
     settings.minorVersion = 3;
 
     window = std::unique_ptr<sf::Window>(new sf::Window(sf::VideoMode(1280, 720), "OpenGL", sf::Style::Close,settings));
+    renderer = std::unique_ptr<Renderer::Renderer>(new Renderer::Renderer());
 }
 
 void process_input(){
@@ -58,15 +63,16 @@ void update(){
 }
 
 void render(){
+    renderer->clear();
     window->display();
 }
 
 int main() {
 
     //-----------------------------------------------------
-    // SFML setup
+    // SFML and rendering setup
     //-----------------------------------------------------
-    setup_SFML();
+    setup_display();
 
     //-----------------------------------------------------
     // Glew setup
