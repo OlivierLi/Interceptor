@@ -3,7 +3,6 @@
 #define GLEW_STATIC
 #define MICRO_SECONDS_PER_FRAME 16667
 
-#include <GL/glew.h>
 #include <SFML/Window.hpp>
 #include <chrono>
 #include <unistd.h>
@@ -73,12 +72,6 @@ int main() {
     // SFML and rendering setup
     //-----------------------------------------------------
     setup_display();
-
-    //-----------------------------------------------------
-    // Glew setup
-    //-----------------------------------------------------
-    glewExperimental = GL_TRUE;
-    glewInit();
 
     //-----------------------------------------------------
     // Main game loop

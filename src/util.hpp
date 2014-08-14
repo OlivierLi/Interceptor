@@ -2,7 +2,7 @@
 #include <fstream>
 #include <sstream>
 
-std::string read_shader_file(std::string shader_file_name){
+inline std::string read_shader_file(std::string shader_file_name){
 
     std::ifstream stream(shader_file_name);
 
