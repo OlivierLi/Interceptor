@@ -28,6 +28,9 @@ Renderer::Renderer()
 
         throw std::runtime_error("Vertex shader compilation failed!");
     }
+
+    shaders.push_back(vertexShader);
+
     //--------------------------------------------------------------------------------
 
     // Create and compile the fragment shader ----------------------------------------
@@ -45,6 +48,7 @@ Renderer::Renderer()
 
         throw std::runtime_error("Fragment shader compilation failed!");
     }
+    shaders.push_back(fragmentShader);
     //--------------------------------------------------------------------------------
 
     // Link the vertex and fragment shader into a shader program----------------------
@@ -53,15 +57,31 @@ Renderer::Renderer()
     glAttachShader(shaderProgram, fragmentShader);
     glBindFragDataLocation(shaderProgram, 0, "outColor");
     glLinkProgram(shaderProgram);
+    programs.push_back(shaderProgram);
     //--------------------------------------------------------------------------------
 
-    //TODO keep track of all the constructs in the vectors and also in a Map for the programs
+
+    //TODO also keep track of programs in a Map
 
 }
 
 Renderer::~Renderer(){
 
-    //TODO dispose of all OpenGL constructs
+    for(auto program:programs){
+        glDeleteProgram(program);
+    }
+
+    for(auto shader:shaders){
+        glDeleteShader(shader);
+    }
+
+    for(auto &buffer:buffers){
+        glDeleteBuffers(1, &buffer);
+    }
+
+    for(auto &vertex_array:vertex_arrays){
+        glDeleteVertexArrays(1,&vertex_array);
+    }
 
 }
 
