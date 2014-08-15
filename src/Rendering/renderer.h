@@ -7,6 +7,7 @@
 #include "../util.hpp"
 #include <vector>
 #include <map>
+#include <array>
 
 class Renderer
 {
@@ -14,7 +15,7 @@ public:
     Renderer();
     ~Renderer();
     void clear();
-    void display_triangles();
+    void display_enemies();
 private:
 
     //Used to keep track of all ressources to dealocate

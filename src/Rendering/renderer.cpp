@@ -53,7 +53,7 @@ void Renderer::create_program(std::string vertex_path, std::string fragment_path
     //--------------------------------------------------------------------------------
 }
 
-void Renderer::display_triangles(){
+void Renderer::display_enemies(){
 
     glUseProgram(programs_map["triangles"]);
 
@@ -70,14 +70,15 @@ void Renderer::display_triangles(){
     GLuint vbo;
     glGenBuffers(1, &vbo);
 
-    GLfloat vertices[] = {
-        0.0f, 0.5f,
-        0.5f, -0.5f,
-        -0.5f, -0.5f
-    };
+    std::vector<GLfloat> vertices { {    0.0f,  0.2f,
+                                         0.2f, -0.2f,
+                                        -0.2f, -0.2f,
+                                         0.2f,  0.0f,
+                                         0.5f, -0.5f,
+                                       - 0.5f, -0.5f} };
 
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices[0])*vertices.size(), vertices.data() , GL_STATIC_DRAW);
 
     // Specify the layout of the vertex data
     GLint posAttrib = glGetAttribLocation(programs_map["triangles"], "position");
@@ -85,7 +86,7 @@ void Renderer::display_triangles(){
     glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
     // Draw a triangle from the 3 vertices
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+    glDrawArrays(GL_TRIANGLES, 0, vertices.size()/2 );
 
     //--------------------------------------------------------------------------------------------------
     //--------------------------------------------------------------------------------------------------
