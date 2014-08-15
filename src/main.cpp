@@ -63,6 +63,7 @@ void update(){
 
 void render(){
     renderer->clear();
+    renderer->display_triangles();
     window->display();
 }
 

@@ -10,14 +10,18 @@ Renderer::Renderer()
 
     //Create programs
     create_program("shaders/triangles.vert","shaders/triangles.frag","triangles");
+
 }
 
 void Renderer::create_program(std::string vertex_path, std::string fragment_path ,std::string program_name){
 
     // Create and compile the vertex shader ------------------------------------------
-    const char *vertexSource = read_shader_file(vertex_path).c_str();
+    std::string vertex_shader_source = read_shader_file(vertex_path);
+    int vertex_shader_source_length = vertex_shader_source.length();
+    const char *vertex_shader_source_cstr = vertex_shader_source.c_str();
+
     GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShader, 1, &vertexSource, NULL);
+    glShaderSource(vertexShader, 1, &vertex_shader_source_cstr, &vertex_shader_source_length);
     glCompileShader(vertexShader);
     test_shader_compilation(vertexShader);
 
@@ -25,9 +29,12 @@ void Renderer::create_program(std::string vertex_path, std::string fragment_path
     //--------------------------------------------------------------------------------
 
     // Create and compile the fragment shader ----------------------------------------
-    const char *fragmentSource = read_shader_file(fragment_path).c_str();
+    std::string fragment_shader_source = read_shader_file(fragment_path);
+    int fragment_shader_source_length = fragment_shader_source.length();
+    const char *fragment_shader_source_cstr = fragment_shader_source.c_str();
+
     GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader, 1, &fragmentSource, NULL);
+    glShaderSource(fragmentShader, 1, &fragment_shader_source_cstr, &fragment_shader_source_length);
     glCompileShader(fragmentShader);
     test_shader_compilation(fragmentShader);
 
@@ -44,8 +51,45 @@ void Renderer::create_program(std::string vertex_path, std::string fragment_path
     programs.push_back(shaderProgram);
     programs_map.insert(std::pair<std::string,GLuint>(program_name,shaderProgram));
     //--------------------------------------------------------------------------------
+}
 
-    //Set the format of buffers for now. Later we will use different formats
+void Renderer::display_triangles(){
+
+    glUseProgram(programs_map["triangles"]);
+
+    //TEMPORARY CODE TO VERIFY THAT EVERYTHING STILL WORKS
+    //--------------------------------------------------------------------------------------------------
+    //--------------------------------------------------------------------------------------------------
+    //--------------------------------------------------------------------------------------------------
+    // Create Vertex Array Object
+    GLuint vao;
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
+
+    // Create a Vertex Buffer Object and copy the vertex data to it
+    GLuint vbo;
+    glGenBuffers(1, &vbo);
+
+    GLfloat vertices[] = {
+        0.0f, 0.5f,
+        0.5f, -0.5f,
+        -0.5f, -0.5f
+    };
+
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    // Specify the layout of the vertex data
+    GLint posAttrib = glGetAttribLocation(programs_map["triangles"], "position");
+    glEnableVertexAttribArray(posAttrib);
+    glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 0, 0);
+
+    // Draw a triangle from the 3 vertices
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+
+    //--------------------------------------------------------------------------------------------------
+    //--------------------------------------------------------------------------------------------------
+    //--------------------------------------------------------------------------------------------------
 }
 
 void Renderer::test_shader_compilation(GLuint shader){

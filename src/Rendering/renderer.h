@@ -14,6 +14,7 @@ public:
     Renderer();
     ~Renderer();
     void clear();
+    void display_triangles();
 private:
 
     //Used to keep track of all ressources to dealocate
