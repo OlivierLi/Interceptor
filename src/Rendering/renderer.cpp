@@ -48,6 +48,11 @@ void Renderer::create_program(std::string vertex_path, std::string fragment_path
     glBindFragDataLocation(shaderProgram, 0, "outColor");
     glLinkProgram(shaderProgram);
 
+    glUseProgram(shaderProgram);
+
+    GLint uni_screen_resolution = glGetUniformLocation(shaderProgram, "screen_resolution");
+    glUniform2f(uni_screen_resolution,SCREEN_RESOLUTION_X,SCREEN_RESOLUTION_Y);
+
     programs.push_back(shaderProgram);
     programs_map.insert(std::pair<std::string,GLuint>(program_name,shaderProgram));
     //--------------------------------------------------------------------------------
@@ -55,13 +60,15 @@ void Renderer::create_program(std::string vertex_path, std::string fragment_path
 
 void Renderer::display_enemies(){
 
-    glUseProgram(programs_map["triangles"]);
+    GLuint current_program = programs_map["triangles"];
+    glUseProgram(current_program);
 
     //TEMPORARY CODE TO VERIFY THAT EVERYTHING STILL WORKS
     //--------------------------------------------------------------------------------------------------
     //--------------------------------------------------------------------------------------------------
     //--------------------------------------------------------------------------------------------------
     // Create Vertex Array Object
+
     GLuint vao;
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
@@ -70,12 +77,13 @@ void Renderer::display_enemies(){
     GLuint vbo;
     glGenBuffers(1, &vbo);
 
-    std::vector<GLfloat> vertices { {    0.0f,  0.2f,
-                                         0.2f, -0.2f,
-                                        -0.2f, -0.2f,
-                                         0.2f,  0.0f,
-                                         0.5f, -0.5f,
-                                       - 0.5f, -0.5f} };
+    std::vector<GLfloat> vertices { {    800 , 600,
+                                         900 , 700,
+                                         1280 , 600,
+                                         0    , 0,
+                                         100  , 100,
+                                         200  , 0
+                                  } };
 
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices[0])*vertices.size(), vertices.data() , GL_STATIC_DRAW);

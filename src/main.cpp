@@ -31,7 +31,7 @@ void setup_display(){
     settings.majorVersion = 4;
     settings.minorVersion = 3;
 
-    window = std::unique_ptr<sf::Window>(new sf::Window(sf::VideoMode(1280, 720), "OpenGL", sf::Style::Close,settings));
+    window = std::unique_ptr<sf::Window>(new sf::Window(sf::VideoMode(SCREEN_RESOLUTION_X, SCREEN_RESOLUTION_Y), "OpenGL", sf::Style::Close,settings));
     renderer = std::unique_ptr<Renderer::Renderer>(new Renderer::Renderer());
 }
 

@@ -9,6 +9,9 @@
 #include <map>
 #include <array>
 
+#define SCREEN_RESOLUTION_X 1280
+#define SCREEN_RESOLUTION_Y 720
+
 class Renderer
 {
 public:
