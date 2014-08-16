@@ -9,7 +9,7 @@ Renderer::Renderer()
     glewInit();
 
     //Create programs
-    create_program("shaders/triangles.vert","shaders/triangles.frag","triangles");
+    create_program("../shaders/triangles.vert","../shaders/triangles.frag","triangles");
 
 }
 
