@@ -19,6 +19,8 @@ public:
     ~Renderer();
     void clear();
     void display_enemies();
+
+    std::vector<GLfloat> vertices;
 private:
 
     //Used to keep track of all ressources to dealocate
@@ -35,15 +37,6 @@ private:
 
     void create_program_and_dao_enemies();
     void test_shader_compilation(GLuint shader);
-
-    std::vector<GLfloat> vertices { {    800 , 600,
-                                         900 , 700,
-                                         1280 , 600,
-                                         0    , 0,
-                                         100  , 100,
-                                         200  , 0
-                                  } };
-
 };
 
 #endif // RENDERER_H

@@ -16,7 +16,7 @@ Renderer::Renderer()
 void Renderer::create_program_and_dao_enemies(){
 
     // Create and compile the vertex shader ------------------------------------------
-    std::string vertex_shader_source = read_shader_file("../shaders/triangles.vert");
+    std::string vertex_shader_source = read_shader_file("../shaders/enemies.vert");
     int vertex_shader_source_length = vertex_shader_source.length();
     const char *vertex_shader_source_cstr = vertex_shader_source.c_str();
 
@@ -29,7 +29,7 @@ void Renderer::create_program_and_dao_enemies(){
     //--------------------------------------------------------------------------------
 
     // Create and compile the fragment shader ----------------------------------------
-    std::string fragment_shader_source = read_shader_file("../shaders/triangles.frag");
+    std::string fragment_shader_source = read_shader_file("../shaders/enemies.frag");
     int fragment_shader_source_length = fragment_shader_source.length();
     const char *fragment_shader_source_cstr = fragment_shader_source.c_str();
 
@@ -71,9 +71,7 @@ void Renderer::create_program_and_dao_enemies(){
     // Create a Vertex Buffer Object and copy the vertex data to it
     GLuint vbo;
     glGenBuffers(1, &vbo);
-
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices[0])*vertices.size(), vertices.data() , GL_STATIC_DRAW);
 
     // Specify the layout of the vertex data
     GLint posAttrib = glGetAttribLocation(programs_map["enemies"], "position");
@@ -94,8 +92,16 @@ void Renderer::display_enemies(){
     glUseProgram(programs_map["enemies"]);
     glBindVertexArray(vaos_map["enemies"]);
 
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices[0])*vertices.size(), vertices.data() , GL_DYNAMIC_DRAW);
+
     // Draw a triangle from the 3 vertices
-    glDrawArrays(GL_TRIANGLES, 0, vertices.size()/2 );
+    glEnable( GL_PROGRAM_POINT_SIZE );
+    glDrawArrays(GL_POINTS, 0, vertices.size()/2 );
+
+    if( glGetError() != GL_NO_ERROR){
+        throw std::runtime_error("Drawing failed!");
+    }
+
 }
 
 void Renderer::test_shader_compilation(GLuint shader){
