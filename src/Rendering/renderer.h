@@ -27,11 +27,22 @@ private:
     std::vector<GLuint> buffers;
     std::vector<GLuint> vertex_arrays;
 
-    //Use to select programs
+    //Used to select programs
     std::map<std::string,GLuint> programs_map;
 
-    void create_program(std::string vertex_path, std::string fragment_path ,std::string program_name);
+    //Used to select daos
+    std::map<std::string,GLuint> vaos_map;
+
+    void create_program_and_dao_enemies();
     void test_shader_compilation(GLuint shader);
+
+    std::vector<GLfloat> vertices { {    800 , 600,
+                                         900 , 700,
+                                         1280 , 600,
+                                         0    , 0,
+                                         100  , 100,
+                                         200  , 0
+                                  } };
 
 };
 

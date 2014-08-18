@@ -8,15 +8,15 @@ Renderer::Renderer()
     glewExperimental = GL_TRUE;
     glewInit();
 
-    //Create programs
-    create_program("../shaders/triangles.vert","../shaders/triangles.frag","triangles");
+    //Create and daos
+    create_program_and_dao_enemies();
 
 }
 
-void Renderer::create_program(std::string vertex_path, std::string fragment_path ,std::string program_name){
+void Renderer::create_program_and_dao_enemies(){
 
     // Create and compile the vertex shader ------------------------------------------
-    std::string vertex_shader_source = read_shader_file(vertex_path);
+    std::string vertex_shader_source = read_shader_file("../shaders/triangles.vert");
     int vertex_shader_source_length = vertex_shader_source.length();
     const char *vertex_shader_source_cstr = vertex_shader_source.c_str();
 
@@ -29,7 +29,7 @@ void Renderer::create_program(std::string vertex_path, std::string fragment_path
     //--------------------------------------------------------------------------------
 
     // Create and compile the fragment shader ----------------------------------------
-    std::string fragment_shader_source = read_shader_file(fragment_path);
+    std::string fragment_shader_source = read_shader_file("../shaders/triangles.frag");
     int fragment_shader_source_length = fragment_shader_source.length();
     const char *fragment_shader_source_cstr = fragment_shader_source.c_str();
 
@@ -48,26 +48,21 @@ void Renderer::create_program(std::string vertex_path, std::string fragment_path
     glBindFragDataLocation(shaderProgram, 0, "outColor");
     glLinkProgram(shaderProgram);
 
+    programs.push_back(shaderProgram);
+    programs_map.insert(std::pair<std::string,GLuint>("enemies",shaderProgram));
+    //--------------------------------------------------------------------------------
+
+
+    //Setup uniforms------------------------------------------------------------------
+
     glUseProgram(shaderProgram);
 
     GLint uni_screen_resolution = glGetUniformLocation(shaderProgram, "screen_resolution");
     glUniform2f(uni_screen_resolution,SCREEN_RESOLUTION_X,SCREEN_RESOLUTION_Y);
 
-    programs.push_back(shaderProgram);
-    programs_map.insert(std::pair<std::string,GLuint>(program_name,shaderProgram));
     //--------------------------------------------------------------------------------
-}
 
-void Renderer::display_enemies(){
-
-    GLuint current_program = programs_map["triangles"];
-    glUseProgram(current_program);
-
-    //TEMPORARY CODE TO VERIFY THAT EVERYTHING STILL WORKS
-    //--------------------------------------------------------------------------------------------------
-    //--------------------------------------------------------------------------------------------------
-    //--------------------------------------------------------------------------------------------------
-    // Create Vertex Array Object
+    //Create dao and map buffer and attrib--------------------------------------------
 
     GLuint vao;
     glGenVertexArrays(1, &vao);
@@ -77,28 +72,30 @@ void Renderer::display_enemies(){
     GLuint vbo;
     glGenBuffers(1, &vbo);
 
-    std::vector<GLfloat> vertices { {    800 , 600,
-                                         900 , 700,
-                                         1280 , 600,
-                                         0    , 0,
-                                         100  , 100,
-                                         200  , 0
-                                  } };
-
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices[0])*vertices.size(), vertices.data() , GL_STATIC_DRAW);
 
     // Specify the layout of the vertex data
-    GLint posAttrib = glGetAttribLocation(programs_map["triangles"], "position");
+    GLint posAttrib = glGetAttribLocation(programs_map["enemies"], "position");
     glEnableVertexAttribArray(posAttrib);
     glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
+    vaos_map.insert(std::pair<std::string,GLuint>("enemies",vao));
+
+    //--------------------------------------------------------------------------------
+
+    //Unmap program and dao
+    glUseProgram(0);
+    glBindVertexArray(0);
+}
+
+void Renderer::display_enemies(){
+
+    glUseProgram(programs_map["enemies"]);
+    glBindVertexArray(vaos_map["enemies"]);
+
     // Draw a triangle from the 3 vertices
     glDrawArrays(GL_TRIANGLES, 0, vertices.size()/2 );
-
-    //--------------------------------------------------------------------------------------------------
-    //--------------------------------------------------------------------------------------------------
-    //--------------------------------------------------------------------------------------------------
 }
 
 void Renderer::test_shader_compilation(GLuint shader){
