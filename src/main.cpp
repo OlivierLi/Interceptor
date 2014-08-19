@@ -9,7 +9,6 @@
 #include <memory>
 #include <vector>
 #include <iostream>
-#include <stdlib.h>
 
 #include "Rendering/renderer.h"
 #include "World/world.h"
@@ -18,6 +17,8 @@
 std::chrono::steady_clock::time_point start;
 std::chrono::steady_clock::time_point end;
 bool running = true;
+
+int test = 0;
 
 //Rendering and display
 std::unique_ptr<sf::Window> window;
@@ -36,6 +37,8 @@ void setup_display(){
     settings.minorVersion = 3;
 
     window = std::unique_ptr<sf::Window>(new sf::Window(sf::VideoMode(SCREEN_RESOLUTION_X, SCREEN_RESOLUTION_Y), "OpenGL", sf::Style::Close,settings));
+    window->setMouseCursorVisible(false);
+
     renderer = std::unique_ptr<Renderer::Renderer>(new Renderer::Renderer());
 }
 
@@ -52,6 +55,8 @@ void process_input(){
             case sf::Event::KeyPressed:
                 frame_events.push_back(window_event);
                 break;
+            case sf::Event::MouseMoved:
+                frame_events.push_back(window_event);
                 //We do not handle long key presses for now
             case sf::Event::KeyReleased:
                 break;
@@ -67,22 +72,11 @@ void update(){
 
 void render(){
     renderer->clear();
-
-    //TEST ADD A RANDOMLY POSITIONED POINT
-    int random_int_x = rand() % 1280 + 1;
-    int random_int_y = rand() % 720 + 1;
-    renderer->vertices.push_back(random_int_x);
-    renderer->vertices.push_back(random_int_y);
-    //TEST END----------------------------
-
-    renderer->display_enemies();
+    renderer->display_enemies(world.entities);
     window->display();
 }
 
 int main() {
-
-    /* initialize random seed: */
-      srand (time(NULL));
 
     //-----------------------------------------------------
     // SFML and rendering setup

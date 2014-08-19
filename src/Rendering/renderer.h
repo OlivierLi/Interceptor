@@ -9,6 +9,8 @@
 #include <map>
 #include <array>
 
+#include "../Entities/gameEntity.h"
+
 #define SCREEN_RESOLUTION_X 1280
 #define SCREEN_RESOLUTION_Y 720
 
@@ -18,9 +20,7 @@ public:
     Renderer();
     ~Renderer();
     void clear();
-    void display_enemies();
-
-    std::vector<GLfloat> vertices;
+    void display_enemies(const std::vector<GameEntity> &enemies);
 private:
 
     //Used to keep track of all ressources to dealocate

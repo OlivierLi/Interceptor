@@ -9,8 +9,8 @@ class World
 public:
     World();
     void update();
-private:
     std::vector<GameEntity> entities;
+private:
 };
 
 #endif // WORLD_H

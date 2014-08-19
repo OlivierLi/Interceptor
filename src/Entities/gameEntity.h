@@ -8,8 +8,9 @@ class GameEntity
 public:
     GameEntity();
     void update();
-private:
     int pos_x,pos_y;
+private:
+
 };
 
 #endif // GAMEENTITY_H

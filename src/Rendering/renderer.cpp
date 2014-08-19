@@ -103,7 +103,15 @@ void Renderer::create_program_and_dao_enemies(){
     glBindVertexArray(0);
 }
 
-void Renderer::display_enemies(){
+void Renderer::display_enemies(const std::vector<GameEntity> &enemies){
+
+    //Get all the positions of the enemies and put them in the buffer
+    std::vector<GLfloat> vertices;
+    vertices.clear();
+    for(auto enemy:enemies){
+        vertices.push_back(enemy.pos_x);
+        vertices.push_back(enemy.pos_y);
+    }
 
     glUseProgram(programs_map["enemies"]);
     glBindVertexArray(vaos_map["enemies"]);
