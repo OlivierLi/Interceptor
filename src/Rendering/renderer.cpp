@@ -16,7 +16,7 @@ Renderer::Renderer()
 void Renderer::create_program_and_dao_enemies(){
 
     // Create and compile the vertex shader ------------------------------------------
-    std::string vertex_shader_source = read_shader_file("../shaders/enemies.vert");
+    std::string vertex_shader_source = read_shader_file("../shaders/enemies_vert.glsl");
     int vertex_shader_source_length = vertex_shader_source.length();
     const char *vertex_shader_source_cstr = vertex_shader_source.c_str();
 
@@ -29,7 +29,7 @@ void Renderer::create_program_and_dao_enemies(){
     //--------------------------------------------------------------------------------
 
     // Create and compile the fragment shader ----------------------------------------
-    std::string fragment_shader_source = read_shader_file("../shaders/enemies.frag");
+    std::string fragment_shader_source = read_shader_file("../shaders/enemies_frag.glsl");
     int fragment_shader_source_length = fragment_shader_source.length();
     const char *fragment_shader_source_cstr = fragment_shader_source.c_str();
 
@@ -41,11 +41,27 @@ void Renderer::create_program_and_dao_enemies(){
     shaders.push_back(fragmentShader);
     //--------------------------------------------------------------------------------
 
+    // Create and compile the geometry shader-----------------------------------------
+
+    std::string geometry_shader_source = read_shader_file("../shaders/enemies_geo.glsl");
+    int geometry_shader_source_length = geometry_shader_source.length();
+    const char *geometry_shader_source_cstr = geometry_shader_source.c_str();
+
+    GLuint geometryShader = glCreateShader(GL_GEOMETRY_SHADER);
+    glShaderSource(geometryShader, 1, &geometry_shader_source_cstr, &geometry_shader_source_length);
+    glCompileShader(geometryShader);
+    test_shader_compilation(geometryShader);
+
+    //--------------------------------------------------------------------------------
+
+
     // Link the vertex and fragment shader into a shader program----------------------
     GLuint shaderProgram = glCreateProgram();
     glAttachShader(shaderProgram, vertexShader);
+
+    glAttachShader(shaderProgram, geometryShader);
+
     glAttachShader(shaderProgram, fragmentShader);
-    glBindFragDataLocation(shaderProgram, 0, "outColor");
     glLinkProgram(shaderProgram);
 
     programs.push_back(shaderProgram);
