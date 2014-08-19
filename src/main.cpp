@@ -73,6 +73,9 @@ void update(){
 void render(){
     renderer->clear();
     renderer->display_enemies(world.entities);
+    //CREATE A PLAYER OBJECT ON THE SPOT TO TEST
+    //THE OBJECT WILL LIVE IN THE WORLD SOON
+    renderer->display_player(GameEntity(500,500));
     window->display();
 }
 

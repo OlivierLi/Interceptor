@@ -1,9 +1,7 @@
 #include "gameEntity.h"
 
-GameEntity::GameEntity()
+GameEntity::GameEntity(int x,int y):pos_x(x),pos_y(y)
 {
-    pos_x = 0;
-    pos_y = 500;
 }
 
 void GameEntity::update(){

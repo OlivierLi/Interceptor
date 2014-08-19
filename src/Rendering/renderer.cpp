@@ -8,7 +8,8 @@ Renderer::Renderer()
     glewExperimental = GL_TRUE;
     glewInit();
 
-    //Create and daos
+    //Create programs and daos
+    create_program_and_dao_player();
     create_program_and_dao_enemies();
 
     //Global settings to set only once
@@ -38,6 +39,64 @@ GLuint Renderer::compile_shader(std::string path, GLuint shader_type){
     }
 
     return shader;
+}
+
+void Renderer::create_program_and_dao_player(){
+
+    // Create and compile the shaders------ ------------------------------------------
+    GLuint vertexShader   = compile_shader("../shaders/enemies_vert.glsl",GL_VERTEX_SHADER);
+    GLuint fragmentShader = compile_shader("../shaders/enemies_frag.glsl",GL_FRAGMENT_SHADER);
+    //--------------------------------------------------------------------------------
+
+
+    // Link the vertex and fragment shader into a shader program----------------------
+    GLuint shaderProgram = glCreateProgram();
+    glAttachShader(shaderProgram, vertexShader);
+    glAttachShader(shaderProgram, fragmentShader);
+    glLinkProgram(shaderProgram);
+
+    programs.push_back(shaderProgram);
+    programs_map.insert(std::pair<std::string,GLuint>("player",shaderProgram));
+    //--------------------------------------------------------------------------------
+
+
+    //Setup uniforms------------------------------------------------------------------
+
+    glUseProgram(shaderProgram);
+
+    GLint uni_screen_resolution = glGetUniformLocation(shaderProgram, "screen_resolution");
+    glUniform2f(uni_screen_resolution,SCREEN_RESOLUTION_X,SCREEN_RESOLUTION_Y);
+
+    //--------------------------------------------------------------------------------
+
+    //Create dao and map buffer and attrib--------------------------------------------
+
+    GLuint vao;
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
+
+    // Create a Vertex Buffer Object and copy the vertex data to it
+    GLuint vbo;
+    glGenBuffers(1, &vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+
+    // Specify the layout of the vertex data
+    GLint posAttrib = glGetAttribLocation(programs_map["player"], "position");
+    glEnableVertexAttribArray(posAttrib);
+    glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 0, 0);
+
+    vaos_map.insert(std::pair<std::string,GLuint>("player",vao));
+
+    //--------------------------------------------------------------------------------
+
+    //Once shaders are linked in a program they can be be disposed of
+    glDeleteShader(fragmentShader);
+    glDeleteShader(vertexShader);
+
+    //Unmap program and dao
+    glUseProgram(0);
+    glBindVertexArray(0);
+    glEnableVertexAttribArray(0);
 }
 
 void Renderer::create_program_and_dao_enemies(){
@@ -98,6 +157,28 @@ void Renderer::create_program_and_dao_enemies(){
     //Unmap program and dao
     glUseProgram(0);
     glBindVertexArray(0);
+    glEnableVertexAttribArray(0);
+}
+
+void Renderer::display_player(GameEntity player){
+
+    //Get all the positions of the enemies and put them in the buffer
+    std::vector<GLfloat> vertices = {(GLfloat)player.pos_x,(GLfloat)player.pos_y};
+
+    glUseProgram(programs_map["player"]);
+    glBindVertexArray(vaos_map["player"]);
+
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices[0])*vertices.size(), vertices.data() , GL_DYNAMIC_DRAW);
+
+    // Draw a point to represent the player
+    glDrawArrays(GL_POINTS, 0, vertices.size()/2 );
+
+    GLuint err = glGetError();
+    if( err != GL_NO_ERROR){
+        std::cout << glewGetErrorString(err) << std::endl;
+        throw std::runtime_error("Drawing failed!");
+    }
+
 }
 
 void Renderer::display_enemies(const std::vector<GameEntity> &enemies){
@@ -117,7 +198,9 @@ void Renderer::display_enemies(const std::vector<GameEntity> &enemies){
     // Draw a triangle from the 3 vertices
     glDrawArrays(GL_POINTS, 0, vertices.size()/2 );
 
-    if( glGetError() != GL_NO_ERROR){
+    GLuint err = glGetError();
+    if( err != GL_NO_ERROR){
+        std::cout << glewGetErrorString(err) << std::endl;
         throw std::runtime_error("Drawing failed!");
     }
 

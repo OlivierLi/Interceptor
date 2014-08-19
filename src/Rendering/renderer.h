@@ -21,6 +21,7 @@ public:
     ~Renderer();
     void clear();
     void display_enemies(const std::vector<GameEntity> &enemies);
+    void display_player(GameEntity player);
 private:
 
     //Used to keep track of all ressources to dealocate
@@ -35,6 +36,7 @@ private:
     std::map<std::string,GLuint> vaos_map;
 
     void create_program_and_dao_enemies();
+    void create_program_and_dao_player();
     GLuint compile_shader(std::string path,GLuint shader_type);
 };
 
