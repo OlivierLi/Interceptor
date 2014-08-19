@@ -29,6 +29,9 @@ std::vector<sf::Event> frame_events;
 
 World world;
 
+//KEEP THE PLAYER POSITION HERE FOR TESTING ONLY
+int x,y;
+
 void setup_display(){
     sf::ContextSettings settings;
 
@@ -56,6 +59,8 @@ void process_input(){
                 frame_events.push_back(window_event);
                 break;
             case sf::Event::MouseMoved:
+                x = window_event.mouseMove.x;
+                y = window_event.mouseMove.y;
                 frame_events.push_back(window_event);
                 //We do not handle long key presses for now
             case sf::Event::KeyReleased:
@@ -75,7 +80,8 @@ void render(){
     renderer->display_enemies(world.entities);
     //CREATE A PLAYER OBJECT ON THE SPOT TO TEST
     //THE OBJECT WILL LIVE IN THE WORLD SOON
-    renderer->display_player(GameEntity(500,500));
+    std::cout << x << ":" << y << std::endl;
+    renderer->display_player(GameEntity(x,720-y));
     window->display();
 }
 

@@ -134,18 +134,12 @@ void Renderer::create_program_and_dao_enemies(){
     GLuint vao;
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
+    vaos_map.insert(std::pair<std::string,GLuint>("enemies",vao));
 
     // Create a Vertex Buffer Object and copy the vertex data to it
     GLuint vbo;
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
-
-    // Specify the layout of the vertex data
-    GLint posAttrib = glGetAttribLocation(programs_map["enemies"], "position");
-    glEnableVertexAttribArray(posAttrib);
-    glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 0, 0);
-
-    vaos_map.insert(std::pair<std::string,GLuint>("enemies",vao));
 
     //--------------------------------------------------------------------------------
 
@@ -167,6 +161,11 @@ void Renderer::display_player(GameEntity player){
 
     glUseProgram(programs_map["player"]);
     glBindVertexArray(vaos_map["player"]);
+
+    // Specify the layout of the vertex data
+    GLint posAttrib = glGetAttribLocation(programs_map["player"], "position");
+    glEnableVertexAttribArray(posAttrib);
+    glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices[0])*vertices.size(), vertices.data() , GL_DYNAMIC_DRAW);
 
@@ -192,6 +191,11 @@ void Renderer::display_enemies(const std::vector<GameEntity> &enemies){
 
     glUseProgram(programs_map["enemies"]);
     glBindVertexArray(vaos_map["enemies"]);
+
+    // Specify the layout of the vertex data
+    GLint posAttrib = glGetAttribLocation(programs_map["enemies"], "position");
+    glEnableVertexAttribArray(posAttrib);
+    glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices[0])*vertices.size(), vertices.data() , GL_DYNAMIC_DRAW);
 
