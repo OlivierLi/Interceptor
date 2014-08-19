@@ -11,56 +11,48 @@ Renderer::Renderer()
     //Create and daos
     create_program_and_dao_enemies();
 
+    //Global settings to set only once
+    glEnable( GL_PROGRAM_POINT_SIZE );
+}
+
+GLuint Renderer::compile_shader(std::string path, GLuint shader_type){
+
+    std::string shader_source = read_shader_file(path);
+    int shader_source_length = shader_source.length();
+    const char *shader_source_cstr = shader_source.c_str();
+
+    GLuint shader = glCreateShader(shader_type);
+    glShaderSource(shader, 1, &shader_source_cstr, &shader_source_length);
+    glCompileShader(shader);
+
+    GLint status;
+
+    glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
+    if(status != GL_TRUE){
+
+        char buffer[512];
+        glGetShaderInfoLog(shader, 512, NULL, buffer);
+        std::cout << buffer << std::endl;
+
+        throw std::runtime_error("Shader compilation failed!");
+    }
+
+    return shader;
 }
 
 void Renderer::create_program_and_dao_enemies(){
 
-    // Create and compile the vertex shader ------------------------------------------
-    std::string vertex_shader_source = read_shader_file("../shaders/enemies_vert.glsl");
-    int vertex_shader_source_length = vertex_shader_source.length();
-    const char *vertex_shader_source_cstr = vertex_shader_source.c_str();
-
-    GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShader, 1, &vertex_shader_source_cstr, &vertex_shader_source_length);
-    glCompileShader(vertexShader);
-    test_shader_compilation(vertexShader);
-
-    shaders.push_back(vertexShader);
-    //--------------------------------------------------------------------------------
-
-    // Create and compile the fragment shader ----------------------------------------
-    std::string fragment_shader_source = read_shader_file("../shaders/enemies_frag.glsl");
-    int fragment_shader_source_length = fragment_shader_source.length();
-    const char *fragment_shader_source_cstr = fragment_shader_source.c_str();
-
-    GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader, 1, &fragment_shader_source_cstr, &fragment_shader_source_length);
-    glCompileShader(fragmentShader);
-    test_shader_compilation(fragmentShader);
-
-    shaders.push_back(fragmentShader);
-    //--------------------------------------------------------------------------------
-
-    // Create and compile the geometry shader-----------------------------------------
-
-    std::string geometry_shader_source = read_shader_file("../shaders/enemies_geo.glsl");
-    int geometry_shader_source_length = geometry_shader_source.length();
-    const char *geometry_shader_source_cstr = geometry_shader_source.c_str();
-
-    GLuint geometryShader = glCreateShader(GL_GEOMETRY_SHADER);
-    glShaderSource(geometryShader, 1, &geometry_shader_source_cstr, &geometry_shader_source_length);
-    glCompileShader(geometryShader);
-    test_shader_compilation(geometryShader);
-
+    // Create and compile the shaders------ ------------------------------------------
+    GLuint vertexShader   = compile_shader("../shaders/enemies_vert.glsl",GL_VERTEX_SHADER);
+    GLuint fragmentShader = compile_shader("../shaders/enemies_frag.glsl",GL_FRAGMENT_SHADER);
+    GLuint geometryShader = compile_shader("../shaders/enemies_geo.glsl", GL_GEOMETRY_SHADER);
     //--------------------------------------------------------------------------------
 
 
     // Link the vertex and fragment shader into a shader program----------------------
     GLuint shaderProgram = glCreateProgram();
     glAttachShader(shaderProgram, vertexShader);
-
     glAttachShader(shaderProgram, geometryShader);
-
     glAttachShader(shaderProgram, fragmentShader);
     glLinkProgram(shaderProgram);
 
@@ -98,6 +90,11 @@ void Renderer::create_program_and_dao_enemies(){
 
     //--------------------------------------------------------------------------------
 
+    //Once shaders are linked in a program they can be be disposed of
+    glDeleteShader(fragmentShader);
+    glDeleteShader(vertexShader);
+    glDeleteShader(geometryShader);
+
     //Unmap program and dao
     glUseProgram(0);
     glBindVertexArray(0);
@@ -107,8 +104,7 @@ void Renderer::display_enemies(const std::vector<GameEntity> &enemies){
 
     //Get all the positions of the enemies and put them in the buffer
     std::vector<GLfloat> vertices;
-    vertices.clear();
-    for(auto enemy:enemies){
+    for(const auto &enemy:enemies){
         vertices.push_back(enemy.pos_x);
         vertices.push_back(enemy.pos_y);
     }
@@ -119,7 +115,6 @@ void Renderer::display_enemies(const std::vector<GameEntity> &enemies){
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices[0])*vertices.size(), vertices.data() , GL_DYNAMIC_DRAW);
 
     // Draw a triangle from the 3 vertices
-    glEnable( GL_PROGRAM_POINT_SIZE );
     glDrawArrays(GL_POINTS, 0, vertices.size()/2 );
 
     if( glGetError() != GL_NO_ERROR){
@@ -128,28 +123,10 @@ void Renderer::display_enemies(const std::vector<GameEntity> &enemies){
 
 }
 
-void Renderer::test_shader_compilation(GLuint shader){
-    GLint status;
-
-    glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
-    if(status != GL_TRUE){
-
-        char buffer[512];
-        glGetShaderInfoLog(shader, 512, NULL, buffer);
-        std::cout << buffer << std::endl;
-
-        throw std::runtime_error("Fragment shader compilation failed!");
-    }
-}
-
 Renderer::~Renderer(){
 
     for(auto program:programs){
         glDeleteProgram(program);
-    }
-
-    for(auto shader:shaders){
-        glDeleteShader(shader);
     }
 
     for(auto &buffer:buffers){

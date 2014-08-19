@@ -24,7 +24,6 @@ public:
 private:
 
     //Used to keep track of all ressources to dealocate
-    std::vector<GLuint> shaders;
     std::vector<GLuint> programs;
     std::vector<GLuint> buffers;
     std::vector<GLuint> vertex_arrays;
@@ -36,7 +35,7 @@ private:
     std::map<std::string,GLuint> vaos_map;
 
     void create_program_and_dao_enemies();
-    void test_shader_compilation(GLuint shader);
+    GLuint compile_shader(std::string path,GLuint shader_type);
 };
 
 #endif // RENDERER_H

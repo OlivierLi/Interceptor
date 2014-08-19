@@ -103,6 +103,9 @@ int main() {
         if(( MICRO_SECONDS_PER_FRAME - microseconds ) > 0){
             usleep((MICRO_SECONDS_PER_FRAME - microseconds));
         }
+        else{
+            std::cout << "Processing took: " << microseconds-MICRO_SECONDS_PER_FRAME << " microseconds too long." << std::endl;
+        }
     }
 
     return 0;
