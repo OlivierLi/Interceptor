@@ -77,11 +77,10 @@ void update(){
 
 void render(){
     renderer->clear();
-    renderer->display_enemies(world.entities);
+    renderer->display_enemies(world.enemies);
     //CREATE A PLAYER OBJECT ON THE SPOT TO TEST
     //THE OBJECT WILL LIVE IN THE WORLD SOON
-    std::cout << x << ":" << y << std::endl;
-    renderer->display_player(GameEntity(x,720-y));
+    renderer->display_player(Player(x,720-y));
     window->display();
 }
 

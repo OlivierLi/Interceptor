@@ -2,14 +2,14 @@
 #define WORLD_H
 
 #include <vector>
-#include "../Entities/gameEntity.h"
+#include "../Entities/enemy.h"
 
 class World
 {
 public:
     World();
     void update();
-    std::vector<GameEntity> entities;
+    std::vector<Enemy> enemies;
 private:
 };
 

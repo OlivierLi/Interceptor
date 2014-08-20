@@ -154,7 +154,7 @@ void Renderer::create_program_and_dao_enemies(){
     glEnableVertexAttribArray(0);
 }
 
-void Renderer::display_player(GameEntity player){
+void Renderer::display_player(Player player){
 
     //Get all the positions of the enemies and put them in the buffer
     std::vector<GLfloat> vertices = {(GLfloat)player.pos_x,(GLfloat)player.pos_y};
@@ -180,7 +180,7 @@ void Renderer::display_player(GameEntity player){
 
 }
 
-void Renderer::display_enemies(const std::vector<GameEntity> &enemies){
+void Renderer::display_enemies(const std::vector<Enemy> &enemies){
 
     //Get all the positions of the enemies and put them in the buffer
     std::vector<GLfloat> vertices;

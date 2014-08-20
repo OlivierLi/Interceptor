@@ -6,9 +6,10 @@
 class GameEntity
 {
 public:
-    GameEntity(int x,int y);
-    void update();
     int pos_x,pos_y;
+    GameEntity(int x,int y);
+
+    virtual void update()=0;
 private:
 
 };
