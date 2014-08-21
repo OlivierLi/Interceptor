@@ -18,8 +18,6 @@ std::chrono::steady_clock::time_point start;
 std::chrono::steady_clock::time_point end;
 bool running = true;
 
-int test = 0;
-
 //Rendering and display
 std::unique_ptr<sf::Window> window;
 std::unique_ptr<Renderer::Renderer> renderer;
@@ -27,10 +25,7 @@ std::unique_ptr<Renderer::Renderer> renderer;
 //Keeps only the events we want for the current frame
 std::vector<sf::Event> frame_events;
 
-World world;
-
-//KEEP THE PLAYER POSITION HERE FOR TESTING ONLY
-int x,y;
+World world(&frame_events);
 
 void setup_display(){
     sf::ContextSettings settings;
@@ -49,6 +44,8 @@ void process_input(){
 
     sf::Event window_event;
 
+    frame_events.clear();
+
     //This depletes the SFML event queue
     while (window->pollEvent(window_event)) {
         switch (window_event.type) {
@@ -59,10 +56,8 @@ void process_input(){
                 frame_events.push_back(window_event);
                 break;
             case sf::Event::MouseMoved:
-                x = window_event.mouseMove.x;
-                y = window_event.mouseMove.y;
                 frame_events.push_back(window_event);
-                //We do not handle long key presses for now
+            //We do not handle long key presses for now
             case sf::Event::KeyReleased:
                 break;
             default:
@@ -77,10 +72,10 @@ void update(){
 
 void render(){
     renderer->clear();
+
     renderer->display_enemies(world.enemies);
-    //CREATE A PLAYER OBJECT ON THE SPOT TO TEST
-    //THE OBJECT WILL LIVE IN THE WORLD SOON
-    renderer->display_player(Player(x,720-y));
+    renderer->display_player(world.player);
+
     window->display();
 }
 

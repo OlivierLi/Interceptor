@@ -15,10 +15,10 @@ file(GLOB_RECURSE SRC "src" "src/*.cpp")
 #Find all SFML headers
 file(GLOB SFML_HEADERS "src" "/usr/include/SFML/*.h")
 
-add_executable(bin/interceptor ${SFML_HEADERS} ${SRC})
+add_executable(interceptor ${SFML_HEADERS} ${SRC})
 
 find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
 
 include_directories( ${OPENGL_INCLUDE_DIRS} ${GLEW_INCLUDE_DIRS} )
-target_link_libraries(bin/interceptor ${OPENGL_LIBRARIES} ${GLEW_LIBRARY} )
+target_link_libraries(interceptor ${OPENGL_LIBRARIES} ${GLEW_LIBRARY} )

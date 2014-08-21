@@ -1,3 +1,0 @@
-class GraphicsComponent {
-    public:
-};

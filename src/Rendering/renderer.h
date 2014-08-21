@@ -13,9 +13,7 @@
 
 #include "../Entities/enemy.h"
 #include "../Entities/player.h"
-
-#define SCREEN_RESOLUTION_X 1280
-#define SCREEN_RESOLUTION_Y 720
+#include "../common.h"
 
 inline std::string read_shader_file(std::string shader_file_name){
 
