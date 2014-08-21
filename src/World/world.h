@@ -20,8 +20,9 @@ public:
     std::vector<sf::Event> *frame_events;
 
 private:
-
-
+    void spawn_enemies();
+    int wave = 1;
+    int enemies_per_wave = 10;
 };
 
 #endif // WORLD_H
