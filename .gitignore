@@ -16,6 +16,7 @@
 *.creator
 *.config
 *.directory
+*.cbp
 bin/
 CMakeFiles/
 CMakeCache.txt

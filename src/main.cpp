@@ -4,6 +4,8 @@
 #define MICRO_SECONDS_PER_FRAME 16667
 
 #include <SFML/Window.hpp>
+#include <SFML/Graphics.hpp>
+
 #include <chrono>
 #include <unistd.h>
 #include <memory>
@@ -21,6 +23,7 @@ bool running = true;
 //Rendering and display
 std::unique_ptr<sf::Window> window;
 std::unique_ptr<Renderer::Renderer> renderer;
+sf::Font font;
 
 //Keeps only the events we want for the current frame
 std::vector<sf::Event> frame_events;
@@ -28,6 +31,13 @@ std::vector<sf::Event> frame_events;
 World world(&frame_events);
 
 void setup_display(){
+
+    //Setup fonts
+    if (!font.loadFromFile("../ressources/fonts/Xolonium-Regular.otf"))
+    {
+        throw std::runtime_error("Could not load font!");
+    }
+
     sf::ContextSettings settings;
 
     settings.antialiasingLevel = 4;
