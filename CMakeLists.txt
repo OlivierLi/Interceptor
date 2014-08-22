@@ -7,7 +7,7 @@ SET(CLANG_COMPILE_FLAGS "-Wall -Werror -Wextra -Wfatal-errors --std=c++11 -g")
 SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${CLANG_COMPILE_FLAGS}" )
 
 #Not how it should be done, SFML should be located using cmake
-set (CMAKE_CXX_LINK_FLAGS ${CMAKE_CXX_LINK_FLAGS} "-lsfml-system -lsfml-window -lsfml-graphics")
+set (CMAKE_CXX_LINK_FLAGS ${CMAKE_CXX_LINK_FLAGS} "-lsfml-system -lsfml-window")
 
 #Find all cpp files recursively
 file(GLOB_RECURSE SRC "src" "src/*.cpp")

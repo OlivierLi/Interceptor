@@ -1,6 +1,5 @@
 #include "world.h"
-#include "../Entities/enemy.h"
-#include "../common.h"
+
 
 World::World(std::vector<sf::Event> *event_queue):player(0,0), frame_events(event_queue) {
     //First wave, later wave will start periodically

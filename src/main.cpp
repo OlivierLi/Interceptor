@@ -1,7 +1,7 @@
 #pragma GCC diagnostic ignored "-Wswitch"
 
 #define GLEW_STATIC
-#define MICRO_SECONDS_PER_FRAME 16667
+#define MICRO_SECONDS_PER_FRAME 8332
 
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
@@ -23,20 +23,15 @@ bool running = true;
 //Rendering and display
 std::unique_ptr<sf::Window> window;
 std::unique_ptr<Renderer::Renderer> renderer;
-sf::Font font;
 
 //Keeps only the events we want for the current frame
 std::vector<sf::Event> frame_events;
 
 World world(&frame_events);
 
-void setup_display(){
+unsigned long frame_count = 0;
 
-    //Setup fonts
-    if (!font.loadFromFile("../ressources/fonts/Xolonium-Regular.otf"))
-    {
-        throw std::runtime_error("Could not load font!");
-    }
+void setup_display(){
 
     sf::ContextSettings settings;
 
@@ -44,7 +39,7 @@ void setup_display(){
     settings.majorVersion = 4;
     settings.minorVersion = 3;
 
-    window = std::unique_ptr<sf::Window>(new sf::Window(sf::VideoMode(SCREEN_RESOLUTION_X, SCREEN_RESOLUTION_Y), "OpenGL", sf::Style::Close,settings));
+    window = std::unique_ptr<sf::Window>(new sf::Window(sf::VideoMode(SCREEN_RESOLUTION_X, SCREEN_RESOLUTION_Y), "Interceptor", sf::Style::Close,settings));
     window->setMouseCursorVisible(false);
 
     renderer = std::unique_ptr<Renderer::Renderer>(new Renderer::Renderer());
@@ -81,6 +76,7 @@ void update(){
 }
 
 void render(){
+
     renderer->clear();
 
     renderer->display_enemies(world.enemies);
@@ -106,7 +102,11 @@ int main() {
 
         process_input();
         update();
-        render();
+
+        //Only render one in 2 frames
+        if(frame_count++%2==0){
+            render();
+        }
 
         //Calculate how long the frame took to process
         end = std::chrono::steady_clock::now();
@@ -116,9 +116,7 @@ int main() {
         if(( MICRO_SECONDS_PER_FRAME - microseconds ) > 0){
             usleep((MICRO_SECONDS_PER_FRAME - microseconds));
         }
-        else{
-            std::cout << "Processing took: " << microseconds-MICRO_SECONDS_PER_FRAME << " microseconds too long." << std::endl;
-        }
+
     }
 
     return 0;

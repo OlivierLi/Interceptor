@@ -4,10 +4,14 @@
 #define WORLD_H
 
 #include <vector>
+#include <SFML/Window.hpp>
+#include <climits>
+
+#include "../common.h"
 #include "../Entities/enemy.h"
 #include "../Entities/player.h"
 
-#include <SFML/Window.hpp>
+
 
 class World
 {

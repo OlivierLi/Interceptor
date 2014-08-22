@@ -6,7 +6,7 @@
 void Enemy::update(const World &world){
     //Input component update
     //physics component update
-    pos_x+=2;
+    pos_x+=1;
 
     //Enemy has gone over the edge, it's dead
     if(pos_x >= SCREEN_RESOLUTION_X ){
@@ -14,7 +14,7 @@ void Enemy::update(const World &world){
     }
 
     //If the enemy collided with the player, it's dead
-    int distance = sqrt(pow((pos_x-world.player.pos_x),2)+pow((pos_y-world.player.pos_y),2));
+    int distance = world.player.get_distance(pos_x,pos_y);
     if(distance < 10){
         dead = true;
     }
