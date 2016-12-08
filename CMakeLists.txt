@@ -10,7 +10,7 @@ file(GLOB_RECURSE SRC "src" "src/*.cpp")
 
 add_executable(bin/interceptor ${SFML_HEADERS} ${SRC})
 
-set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR} "./cmake/modules/")
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules/")
 
 find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
