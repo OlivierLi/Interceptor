@@ -10,7 +10,7 @@ class Enemy : public GameEntity {
   Enemy(int x, int y) : GameEntity(x, y) {}
   virtual ~Enemy();
   void update(const World& world) override;
-  bool is_dead();
+  bool is_dead() const;
 
  private:
   bool dead = false;

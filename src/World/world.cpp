@@ -25,14 +25,8 @@ void World::update() {
   }
 
   // Remove dead enemies from the list
-  for (std::vector<Enemy>::iterator it = enemies.begin();
-       it != enemies.end();) {
-    if (it->is_dead()) {
-      it = enemies.erase(it);
-    } else {
-      ++it;
-    }
-  }
+  enemies.erase(std::remove_if(enemies.begin(), enemies.end(), 
+              [](const Enemy& enemy){return enemy.is_dead();}), enemies.end());
 
   // No more enemies, time to create another wave
   if (enemies.empty()) {

@@ -19,10 +19,8 @@ void Enemy::update(const World& world) {
   }
 }
 
-bool Enemy::is_dead() {
+bool Enemy::is_dead() const {
   return dead;
 }
 
-Enemy::~Enemy() {
-  ;
-}
+Enemy::~Enemy() = default; 

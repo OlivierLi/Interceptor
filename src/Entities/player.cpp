@@ -36,6 +36,4 @@ int Player::get_distance(int x, int y) const {
   return minimum_distance;
 }
 
-Player::~Player() {
-  ;
-}
+Player::~Player() = default;

@@ -1,7 +1,7 @@
 #pragma GCC diagnostic ignored "-Wswitch"
 
 #define GLEW_STATIC
-#define MICRO_SECONDS_PER_FRAME 8332
+#define MICRO_SECONDS_PER_FRAME 8332 // Precomputed to achieve 60 fps.
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
@@ -99,11 +99,7 @@ int main() {
 
     process_input();
     update();
-
-    // Only render one in 2 frames
-    if (frame_count++ % 2 == 0) {
-      render();
-    }
+    render();
 
     // Calculate how long the frame took to process
     end = std::chrono::steady_clock::now();
@@ -111,8 +107,8 @@ int main() {
         std::chrono::duration_cast<std::chrono::microseconds>(end - start)
             .count();
 
-    // Sleep if the processing took less than what is necessary to achieve 60
-    // FPS
+    // Sleep if the processing took less than what is necessary to achieve the 
+    // target FPS.
     if ((MICRO_SECONDS_PER_FRAME - microseconds) > 0) {
       usleep((MICRO_SECONDS_PER_FRAME - microseconds));
     }
