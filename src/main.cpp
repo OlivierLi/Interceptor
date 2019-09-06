@@ -22,7 +22,7 @@ bool running = true;
 
 //Rendering and display
 std::unique_ptr<sf::Window> window;
-std::unique_ptr<Renderer::Renderer> renderer;
+std::unique_ptr<Renderer> renderer;
 
 //Keeps only the events we want for the current frame
 std::vector<sf::Event> frame_events;
@@ -39,10 +39,10 @@ void setup_display(){
     settings.majorVersion = 4;
     settings.minorVersion = 3;
 
-    window = std::unique_ptr<sf::Window>(new sf::Window(sf::VideoMode(SCREEN_RESOLUTION_X, SCREEN_RESOLUTION_Y), "Interceptor", sf::Style::Close,settings));
+    window = std::make_unique<sf::Window>(sf::VideoMode(SCREEN_RESOLUTION_X, SCREEN_RESOLUTION_Y), "Interceptor", sf::Style::Close,settings);
     window->setMouseCursorVisible(false);
 
-    renderer = std::unique_ptr<Renderer::Renderer>(new Renderer::Renderer());
+    renderer = std::make_unique<Renderer>();
 }
 
 void process_input(){

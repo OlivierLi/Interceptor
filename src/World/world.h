@@ -11,8 +11,6 @@
 #include "../Entities/enemy.h"
 #include "../Entities/player.h"
 
-
-
 class World
 {
 public:
